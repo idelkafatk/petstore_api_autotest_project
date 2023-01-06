@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Тестирование раздела питомцев")
 public class PetsTests {
 
-    @DisplayName("Добавляем нового питомца в магазин")
+    @DisplayName("Добавление нового питомца в магазин")
     @Test
     void createPetTest() {
         Pet petProfile = createNewPet();

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Тестирование функций пользователя")
 public class UsersTests {
 
-    @DisplayName("Создаем нового пользователя")
+    @DisplayName("Добавление нового пользователя")
     @Test
     void createUserTest() {
         User userProfile = createNewUser();
@@ -29,7 +29,7 @@ public class UsersTests {
         });
     }
 
-    @DisplayName("Получаем информацию о пользователе по username")
+    @DisplayName("Получение информации о пользователе по username")
     @Test
     void getUserByIdTest() {
         User userProfile = createNewUser();
@@ -51,7 +51,7 @@ public class UsersTests {
         });
     }
 
-    @DisplayName("Изменяем информацию о пользователе")
+    @DisplayName("Изменение информации о пользователе")
     @Test
     void updateUserInfoTest() {
         User userProfile = createNewUser();
