@@ -1,6 +1,5 @@
 package fatk.idelka.specs.pets;
 
-import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
 import static helpers.AllureCustomListener.withCustomTemplates;

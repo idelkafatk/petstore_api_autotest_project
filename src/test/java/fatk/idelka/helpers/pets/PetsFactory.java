@@ -1,6 +1,6 @@
 package fatk.idelka.helpers.pets;
 
-import fatk.idelka.models.Pet;
+import fatk.idelka.models.pets.Pet;
 import io.qameta.allure.Step;
 
 import static fatk.idelka.helpers.RandomUtils.*;
@@ -11,10 +11,10 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 
 public class PetsFactory {
 
-    @Step("Создаем питомца")
-    public static Pet makeNewPet() {
+    @Step("Создаем нового питомца")
+    public static Pet createNewPet() {
         Pet petsData = new Pet();
-        petsData.setId(petId);
+        petsData.setId(id);
         petsData.setName(petName);
         petsData.setPhotoUrls(getPhotoUrls());
         return petsData;
@@ -29,7 +29,7 @@ public class PetsFactory {
                 .post("/pet")
                 .then()
                 .spec(petsResponseSpec)
-                .body(matchesJsonSchemaInClasspath("schemas/pets/PetSchema.json"))
+                .body(matchesJsonSchemaInClasspath("schemas/pets/postPetSchema.json"))
                 .statusCode(200)
                 .extract().as(Pet.class);
     }

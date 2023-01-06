@@ -1,13 +1,13 @@
 package fatk.idelka.tests;
 
 import fatk.idelka.helpers.RandomUtils;
-import fatk.idelka.models.Pet;
-import org.asynchttpclient.Response;
+import fatk.idelka.models.pets.Pet;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static fatk.idelka.helpers.pets.PetsFactory.addNewPetToStore;
-import static fatk.idelka.helpers.pets.PetsFactory.makeNewPet;
+import static fatk.idelka.helpers.pets.PetsFactory.createNewPet;
 import static fatk.idelka.specs.pets.PetsRequest.petsRequestSpec;
 import static fatk.idelka.specs.pets.PetsResponse.petsResponseSpec;
 import static io.qameta.allure.Allure.step;
@@ -21,7 +21,7 @@ public class PetsTests {
     @DisplayName("Добавляем нового питомца в магазин")
     @Test
     void createPetTest() {
-        Pet petProfile = makeNewPet();
+        Pet petProfile = createNewPet();
         Pet newPet = addNewPetToStore(petProfile);
 
         step("Проверяем, что полученные данные соответсвуют отправленным", () -> {
@@ -33,7 +33,7 @@ public class PetsTests {
     @DisplayName("Получение информации о питомце по ID")
     @Test
     void getPetByIdTest() {
-        Pet petProfile = makeNewPet();
+        Pet petProfile = createNewPet();
         addNewPetToStore(petProfile);
 
         Pet getPetById = given()
@@ -43,6 +43,7 @@ public class PetsTests {
             .then()
                 .spec(petsResponseSpec)
                 .statusCode(200)
+                .body(matchesJsonSchemaInClasspath("schemas/pets/getPetSchema.json"))
                 .extract().as(Pet.class);
 
         step("Проверяем, что данные питомца соответствует заданным", () -> {
@@ -55,7 +56,7 @@ public class PetsTests {
     @DisplayName("Обновление информации о питомце")
     @Test
     void updatePetInformationTest() {
-        Pet petProfile = makeNewPet();
+        Pet petProfile = createNewPet();
         addNewPetToStore(petProfile);
 
         step("Меняем данные питомца", () -> {
@@ -68,7 +69,7 @@ public class PetsTests {
                     .put("/pet")
                     .then()
                     .spec(petsResponseSpec)
-                    .body(matchesJsonSchemaInClasspath("schemas/pets/PetSchema.json"))
+                    .body(matchesJsonSchemaInClasspath("schemas/pets/postPetSchema.json"))
                     .statusCode(200)
                     .extract().as(Pet.class);
 
@@ -83,19 +84,24 @@ public class PetsTests {
     @DisplayName("Удаление информации о питомце по ID")
     @Test
     void delPetByIdTest() {
-        Pet petProfile = makeNewPet();
+        Pet petProfile = createNewPet();
         Pet newPetInStore = addNewPetToStore(petProfile);
 
-        Response response =
-                given()
-                .spec(requestSpecification)
-            .when()
-                .body(newPetInStore)
-                .delete("/pet/" + newPetInStore.getId())
-            .then()
-                .spec(responseSpecification)
-                .body(matchesJsonSchemaInClasspath("schemas/pets/deletePetSchema.json"))
-                .statusCode(200)
-                .extract().body().as(Response.class);
+        step("Удаляем информацию о созданном питомце", () -> {
+            Response response = given()
+                    .spec(petsRequestSpec)
+                    .when()
+                    .delete("/pet/" + newPetInStore.getId())
+                    .then()
+                    .spec(petsResponseSpec)
+                    .body(matchesJsonSchemaInClasspath("schemas/pets/deletePetSchema.json"))
+                    .statusCode(200)
+                    .extract().response();
+
+            step("Сервер должен прислать в ответе Id удаленного питомца", () -> {
+                assert response.path("message").equals(newPetInStore.getId().toString());
+            });
+        });
+
     }
 }
