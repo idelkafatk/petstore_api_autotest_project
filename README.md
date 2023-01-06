@@ -154,7 +154,7 @@ gradle clean test
   <img src="images/screens/jira_task.png" alt="job" width="800">
 </p>
 
-# <img width="4%" title="Jira" src="images/logo/telegram.svg"><a id="telegram">Уведомления в Telegram</a>
+# <img width="4%" title="Jira" src="images/logo/Telegram.svg"><a id="telegram">Уведомления в Telegram</a>
 > После завершения сборки, бот автоматически отправляет уведомление в телеграм с результатами теста
 <p align="center">
   <img src="images/screens/telegram_notifications.png" alt="job" width="400">
