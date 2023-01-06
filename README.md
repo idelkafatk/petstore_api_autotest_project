@@ -1,6 +1,6 @@
 <a id="lift"></a>
 
-## Проект по автоматизации тестирования API [PetStore](https://petstore.swagger.io/)<img width="5%" title="Pet" src="images/logo/pet.svg">
+# Проект по автоматизации тестирования [PetStore](https://petstore.swagger.io/)<img width="5%" title="Pet" src="images/logo/pet.svg">
 
 ## Содержание :clipboard:
 
